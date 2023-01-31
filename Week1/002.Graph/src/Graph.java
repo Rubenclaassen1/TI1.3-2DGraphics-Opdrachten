@@ -39,6 +39,8 @@ public class Graph extends Application {
             graphics.draw(new Line2D.Double(x * scale,y*scale,(x-resolution)*scale,lastY*scale));
             lastY = y;
         }
+
+
     }
 
     
