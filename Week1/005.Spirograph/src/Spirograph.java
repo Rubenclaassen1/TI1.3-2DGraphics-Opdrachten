@@ -24,6 +24,8 @@ public class Spirograph extends Application {
     Canvas canvas;
     private CheckBox checkBox;
     private Button button;
+
+    private boolean centered = true;
     private TextField v1;
     private TextField v2;
     private TextField v3;
@@ -66,8 +68,14 @@ public class Spirograph extends Application {
         c = Double.parseDouble(v3.getText());
         d = Double.parseDouble(v4.getText());
 
-        graphics.translate(this.canvas.getWidth()/2, this.canvas.getHeight()/2);
-        graphics.scale(1,-1);
+
+        if (centered){
+
+            graphics.translate(this.canvas.getWidth()/2, this.canvas.getHeight()/2);
+            graphics.scale(0.5,-0.5);
+            centered = false;
+        }
+
 
 
         double resolution = 0.01;
