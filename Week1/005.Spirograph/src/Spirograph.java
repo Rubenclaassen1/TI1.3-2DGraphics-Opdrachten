@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.geom.*;
+
 import javafx.application.Application;
+
 import static javafx.application.Application.launch;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -30,7 +33,7 @@ public class Spirograph extends Application {
     private TextField v2;
     private TextField v3;
     private TextField v4;
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.canvas = new Canvas(1920, 1080);
@@ -40,16 +43,13 @@ public class Spirograph extends Application {
         HBox topBar = new HBox();
         mainBox.getChildren().add(topBar);
         mainBox.getChildren().add(new Group(canvas));
-        
+
         topBar.getChildren().add(v1 = new TextField("300"));
         topBar.getChildren().add(v2 = new TextField("1"));
         topBar.getChildren().add(v3 = new TextField("300"));
         topBar.getChildren().add(v4 = new TextField("10"));
-        topBar.getChildren().add(button = new Button("Draw") );
+        topBar.getChildren().add(button = new Button("Draw"));
         topBar.getChildren().add(checkBox = new CheckBox("Rainbow"));
-                
-
-
 
 
         button.setOnAction((event) -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
@@ -58,8 +58,8 @@ public class Spirograph extends Application {
         primaryStage.setTitle("Spirograph");
         primaryStage.show();
     }
-    
-    
+
+
     public void draw(FXGraphics2D graphics) {
 
 
@@ -69,36 +69,37 @@ public class Spirograph extends Application {
         d = Double.parseDouble(v4.getText());
 
 
-        if (centered){
+        if (centered)
+        {
 
-            graphics.translate(this.canvas.getWidth()/2, this.canvas.getHeight()/2);
-            graphics.scale(0.5,-0.5);
+            graphics.translate(this.canvas.getWidth() / 2, this.canvas.getHeight() / 2);
+            graphics.scale(0.5, -0.5);
             centered = false;
         }
 
 
-
         double resolution = 0.01;
-        float lastx =(float)(a*Math.cos(b*0) + c*Math.cos(d*0));
-        float lasty =(float)(a*Math.sin(b*0) + c*Math.sin(d*0));
+        float lastx = (float) (a * Math.cos(b * 0) + c * Math.cos(d * 0));
+        float lasty = (float) (a * Math.sin(b * 0) + c * Math.sin(d * 0));
 
-        for (double i = 0; i < 10; i+= resolution) {
-            if(checkBox.isSelected()){
-                graphics.setColor(Color.getHSBColor((float) (i/10),1,1));
+        for (double i = 0; i < 10; i += resolution)
+        {
+            if (checkBox.isSelected())
+            {
+                graphics.setColor(Color.getHSBColor((float) (i / 10), 1, 1));
             }
-            float x = (float)(a*Math.cos(b*i) + c*Math.cos(d*i));
-            float y = (float)(a*Math.sin(b*i) + c*Math.sin(d*i));
+            float x = (float) (a * Math.cos(b * i) + c * Math.cos(d * i));
+            float y = (float) (a * Math.sin(b * i) + c * Math.sin(d * i));
 
-            graphics.draw(new Line2D.Double(x,y,lastx, lasty));
+            graphics.draw(new Line2D.Double(x, y, lastx, lasty));
             lastx = x;
             lasty = y;
         }
         //you can use Double.parseDouble(v1.getText()) to get a double value from the first textfield
         //feel free to add more textfields or other controls if needed, but beware that swing components might clash in naming
     }
-    
-    
-    
+
+
     public static void main(String[] args) {
         launch(Spirograph.class);
     }
