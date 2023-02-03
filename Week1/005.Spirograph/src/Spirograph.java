@@ -82,11 +82,11 @@ public class Spirograph extends Application {
         float lastx = (float) (a * Math.cos(b * 0) + c * Math.cos(d * 0));
         float lasty = (float) (a * Math.sin(b * 0) + c * Math.sin(d * 0));
 
-        for (double i = 0; i < 10; i += resolution)
+        for (double i = 0; i < 2* Math.PI; i += resolution)
         {
             if (checkBox.isSelected())
             {
-                graphics.setColor(Color.getHSBColor((float) (i / 10), 1, 1));
+                graphics.setColor(Color.getHSBColor((float) (i / 2*Math.PI), 1, 1));
             }
             float x = (float) (a * Math.cos(b * i) + c * Math.cos(d * i));
             float y = (float) (a * Math.sin(b * i) + c * Math.sin(d * i));
