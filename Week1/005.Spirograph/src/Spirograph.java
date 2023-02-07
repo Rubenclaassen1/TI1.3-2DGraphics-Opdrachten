@@ -78,7 +78,7 @@ public class Spirograph extends Application {
         }
 
 
-        double resolution = 0.01;
+        double resolution = 0.001;
         float lastx = (float) (a * Math.cos(b * 0) + c * Math.cos(d * 0));
         float lasty = (float) (a * Math.sin(b * 0) + c * Math.sin(d * 0));
 
