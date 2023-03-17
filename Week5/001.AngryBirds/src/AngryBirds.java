@@ -9,7 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
@@ -65,6 +68,45 @@ public class AngryBirds extends Application {
     public void init() {
         world = new World();
         world.setGravity(new Vector2(0, -9.8));
+
+        Body floor = new Body();
+        floor.addFixture(Geometry.createRectangle(20,2));
+        floor.getTransform().setTranslation(0,-3.5);
+        floor.setMass(MassType.INFINITE);
+        world.addBody(floor);
+        gameObjects.add(new GameObject("/images/Java2D.png",floor, new Vector2(0,33),2));
+
+        for (int x = 0; x <2 ; x++)
+        {
+            for (int y = 0; y < 2; y++)
+            {
+                Body box = new Body();
+                box.addFixture(Geometry.createRectangle(.75,.75));
+                box.setMass(MassType.NORMAL);
+                box.getTransform().setTranslation(5 + x*2,-2 + y*.75);
+                world.addBody(box);
+                gameObjects.add(new GameObject("/images/Box.png", box, new Vector2(0,0), 1));
+            }
+        }
+
+        Body beam = new Body();
+        beam.addFixture(Geometry.createRectangle(2.75, .25));
+        beam.setMass(MassType.NORMAL);
+        beam.getTransform().setTranslation(6,-.5);
+        world.addBody(beam);
+        gameObjects.add(new GameObject("/images/Beam.png", beam, new Vector2(0,0),1));
+
+        for (int i = 0; i < 2; i++)
+        {
+            Body topbox = new Body();
+            topbox.addFixture(Geometry.createRectangle(.75,.75));
+            topbox.setMass(MassType.NORMAL);
+            topbox.getTransform().setTranslation(6,-.25+i*.75);
+            world.addBody(topbox);
+            gameObjects.add(new GameObject("/images/Box.png", topbox, new Vector2(0,0), 1));
+        }
+
+
     }
 
     public void draw(FXGraphics2D graphics) {
