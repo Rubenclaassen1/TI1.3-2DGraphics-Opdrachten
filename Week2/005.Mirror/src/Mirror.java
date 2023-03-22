@@ -61,7 +61,7 @@ public class Mirror extends Application {
     }
 
     public void square(FXGraphics2D graphics){
-        this.square = new Area (new Rectangle2D.Double(100, -50,100,100));
+        this.square = new Area (new Rectangle2D.Double(200, 100,100,100));
         graphics.draw(square);
     }
 
