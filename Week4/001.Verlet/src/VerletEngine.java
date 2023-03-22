@@ -95,8 +95,10 @@ public class VerletEngine extends Application {
         Point2D mousePosition = new Point2D.Double(e.getX(), e.getY());
         Particle nearest = getNearest(mousePosition);
         Particle newParticle = new Particle(mousePosition);
-        particles.add(newParticle);
-        constraints.add(new DistanceConstraint(newParticle, nearest));
+
+
+
+
 
         if (e.getButton() == MouseButton.SECONDARY) {
             ArrayList<Particle> sorted = new ArrayList<>();
@@ -110,12 +112,36 @@ public class VerletEngine extends Application {
                 }
             });
 
-            constraints.add(new DistanceConstraint(newParticle, sorted.get(2)));
+            if (e.isControlDown()){
+                particles.add(newParticle);
+                constraints.add(new DistanceConstraint(newParticle,nearest,100));
+                constraints.add(new DistanceConstraint(newParticle, sorted.get(2), 100));
+
+
+            }else if(e.isShiftDown()){
+                constraints.add(new DistanceConstraint(nearest,sorted.get(1)));
+
+
+            }else{
+                particles.add(newParticle);
+                constraints.add(new DistanceConstraint(newParticle, sorted.get(2)));
+                constraints.add(new DistanceConstraint(newParticle, nearest));
+            }
+
+
+
         } else if (e.getButton() == MouseButton.MIDDLE) {
             // Reset
             particles.clear();
             constraints.clear();
             init();
+        } else{
+            if (e.isControlDown()){
+                constraints.add(new PositionConstraint(newParticle));
+            } else{
+                particles.add(newParticle);
+                constraints.add(new DistanceConstraint(newParticle, nearest));
+            }
         }
     }
 
