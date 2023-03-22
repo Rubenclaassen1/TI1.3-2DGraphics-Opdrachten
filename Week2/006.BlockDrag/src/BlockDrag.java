@@ -48,7 +48,7 @@ public class BlockDrag extends Application {
 
 
         for (Renderable block : blocks) {
-            Rectangle2D square = new Rectangle2D.Double(block.getPosition().getX(),block.getPosition().getY(), block.getWidth(),block.getHeight());
+            Rectangle2D square = new Rectangle2D.Double(block.getPosition().getX(),block.getPosition().getY(), 50,50);
             graphics.setColor(block.getColor());
             graphics.fill(square);
 
@@ -74,7 +74,7 @@ public class BlockDrag extends Application {
 
         if(e.getButton().equals(MouseButton.PRIMARY)){
             for (Renderable block : blocks) {
-                if (-25 < (block.getPosition().getX()-x) && block.getPosition().getX() - x > 25 && block.getPosition().getY() - y < -25 && block.getPosition().getY() > 25){
+                if(block.getShape().contains(e.getX(),e.getY())){
                     this.selected = block;
                     System.out.println(selected.getPosition());
                     break;
@@ -92,15 +92,10 @@ public class BlockDrag extends Application {
     private void mouseDragged(MouseEvent e)
     {
         if (this.selected != null){
-            blocks.remove(selected);
-
             Point2D position = new Point2D.Double(e.getX(),e.getY());
             selected.setPosition(position);
-
-            Renderable square = new Renderable(selected.getShape(), position, selected.getColor());
-            blocks.add(square);
-            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
         }
+        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
     }
 
     public void init(){
@@ -110,7 +105,7 @@ public class BlockDrag extends Application {
             int x = (int) ((Math.random()*1600));
             int y = (int) ((Math.random()*900));
 
-            Rectangle2D square = new Rectangle2D.Double(x,y,width,height);
+            Area square = new Area(new Rectangle2D.Double(x,y,width,height));
             Point2D point2D = new Point2D.Double(x + (width/2f), y + (height/2f));
             Color color = (Color.getHSBColor((float) (Math.random() * 256), 0.7f, 1));
 
