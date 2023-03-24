@@ -11,7 +11,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.joint.PinJoint;
 import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
@@ -25,6 +27,12 @@ public class AngryBirds extends Application {
     private Camera camera;
     private boolean debugSelected = false;
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
+
+
+    private Body bird;
+
+    private PinJoint catapultJoint;
+    private boolean ballThrown;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -42,8 +50,13 @@ public class AngryBirds extends Application {
         mainPane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
+//        canvas.setOnMouseReleased(event -> {
+//            if (event.getX() )
+//        });
+
         camera = new Camera(canvas, g -> draw(g), g2d);
         mousePicker = new MousePicker(canvas);
+
 
         new AnimationTimer() {
             long last = -1;
@@ -62,12 +75,14 @@ public class AngryBirds extends Application {
         stage.setScene(new Scene(mainPane, 1920, 1080));
         stage.setTitle("Angry Birds");
         stage.show();
-        draw(g2d);
+
     }
 
     public void init() {
+
+//        ballThrown = false;
         world = new World();
-        world.setGravity(new Vector2(0, -9.8));
+        world.setGravity(new Vector2(0, -9.8/4));
 
         Body floor = new Body();
         floor.addFixture(Geometry.createRectangle(20,2));
@@ -107,6 +122,25 @@ public class AngryBirds extends Application {
         }
 
 
+
+        Body catapult = new Body();
+        catapult.getTransform().setTranslation(-8, -2);
+        catapult.setMass(MassType.INFINITE);
+        world.addBody(catapult);
+        gameObjects.add(new GameObject("/images/Catapult.png", catapult, new Vector2(0,0), 1));
+
+        bird = new Body();
+        bird.addFixture(Geometry.createCircle(.2));
+        bird.getTransform().setTranslation(catapult.getTransform().getTranslation());
+        bird.setMass(MassType.NORMAL);
+        bird.getFixture(0).setRestitution(0.75);
+        world.addBody(bird);
+        gameObjects.add(new GameObject("/images/bird.png", bird, new Vector2(0,0), 1));
+
+        catapultJoint = new PinJoint(bird, catapult.getTransform().getTranslation(),10,0,500);
+        catapultJoint.setTarget(catapult.getTransform().getTranslation());
+        catapultJoint.setCollisionAllowed(false);
+        world.addJoint(catapultJoint);
     }
 
     public void draw(FXGraphics2D graphics) {
@@ -118,6 +152,8 @@ public class AngryBirds extends Application {
 
         graphics.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
         graphics.scale(1, -1);
+
+
 
         for (GameObject go : gameObjects) {
             go.draw(graphics);
@@ -134,6 +170,7 @@ public class AngryBirds extends Application {
     public void update(double deltaTime) {
         mousePicker.update(world, camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()), 100);
         world.update(deltaTime);
+
     }
 
     public static void main(String[] args) {
