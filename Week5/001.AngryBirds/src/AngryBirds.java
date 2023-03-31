@@ -27,12 +27,8 @@ public class AngryBirds extends Application {
     private Camera camera;
     private boolean debugSelected = false;
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
-
-
-    private Body bird;
-
     private PinJoint catapultJoint;
-    private boolean ballThrown;
+
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -50,9 +46,6 @@ public class AngryBirds extends Application {
         mainPane.setCenter(canvas);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
-//        canvas.setOnMouseReleased(event -> {
-//            if (event.getX() )
-//        });
 
         camera = new Camera(canvas, g -> draw(g), g2d);
         mousePicker = new MousePicker(canvas);
@@ -80,7 +73,6 @@ public class AngryBirds extends Application {
 
     public void init() {
 
-//        ballThrown = false;
         world = new World();
         world.setGravity(new Vector2(0, -9.8/4));
 
@@ -129,11 +121,11 @@ public class AngryBirds extends Application {
         world.addBody(catapult);
         gameObjects.add(new GameObject("/images/Catapult.png", catapult, new Vector2(0,0), 1));
 
-        bird = new Body();
+        Body bird = new Body();
         bird.addFixture(Geometry.createCircle(.2));
         bird.getTransform().setTranslation(catapult.getTransform().getTranslation());
         bird.setMass(MassType.NORMAL);
-        bird.getFixture(0).setRestitution(0.75);
+        bird.getFixture(0).setRestitution(0.2);
         world.addBody(bird);
         gameObjects.add(new GameObject("/images/bird.png", bird, new Vector2(0,0), 1));
 
