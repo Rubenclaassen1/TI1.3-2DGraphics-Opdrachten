@@ -18,15 +18,11 @@ public class GameObject {
     private Vector2 offset;
     private double scale;
 
-    public GameObject(String imageFile, Body body, Vector2 offset, double scale) {
+    public GameObject(BufferedImage image, Body body, Vector2 offset, double scale) {
         this.body = body;
         this.offset = offset;
         this.scale = scale;
-        try {
-            image = ImageIO.read(getClass().getResource(imageFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.image = image;
     }
 
     public void draw(FXGraphics2D g2d) {
@@ -43,5 +39,10 @@ public class GameObject {
         tx.translate(-image.getWidth() / 2, -image.getHeight() / 2);
         g2d.drawImage(image, tx, null);
 
+    }
+
+
+    public void setImage(BufferedImage image){
+        this.image = image;
     }
 }
